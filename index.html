@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hendry Chou — Portfolio</title>
+<meta name="description" content="Hendry Chou is a designer crafting complex products and addressing intricate user needs. Currently shaping the future of wealth management at PINA Indonesia.">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  --bg-deep: #08090a;
+  --bg-panel: #0f1011;
+  --bg-surface: #191a1b;
+  --bg-elevated: #222326;
+  --bg-card: rgba(255,255,255,0.03);
+  --bg-card-hover: rgba(255,255,255,0.06);
+
+  --text-primary: #f7f8f8;
+  --text-secondary: #d0d6e0;
+  --text-tertiary: #8a8f98;
+  --text-quaternary: #62666d;
+
+  --accent: #c9a96e;
+  --accent-light: #e8d5a3;
+  --accent-dark: #a88850;
+  --accent-glow: rgba(201,169,110,0.15);
+
+  --border-subtle: rgba(255,255,255,0.05);
+  --border-standard: rgba(255,255,255,0.08);
+  --border-strong: rgba(255,255,255,0.12);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --nav-height: 56px;
+  --max-width: 1200px;
+  --transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--accent) var(--bg-panel)}
+body{
+  font-family:var(--font);
+  font-feature-settings:'cv01','ss03';
+  background:var(--bg-deep);
+  color:var(--text-secondary);
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  cursor:default;
+}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg-panel)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:20px}
+::selection{background:var(--accent);color:var(--bg-deep)}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;height:auto;display:block}
+button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
+
+/* ============================================================
+   CUSTOM CURSOR
+   ============================================================ */
+.cursor-dot{
+  position:fixed;pointer-events:none;z-index:99999;
+  width:8px;height:8px;border-radius:50%;
+  background:var(--accent);
+  transform:translate(-50%,-50%);
+  transition:width .3s,height .3s,background .3s;
+  mix-blend-mode:difference;
+}
+.cursor-ring{
+  position:fixed;pointer-events:none;z-index:99998;
+  width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--accent);
+  transform:translate(-50%,-50%);
+  transition:width .3s,height .3s,border-color .3s,opacity .3s;
+  mix-blend-mode:difference;
+}
+.cursor-dot.hover{width:14px;height:14px;background:var(--accent-light)}
+.cursor-ring.hover{width:56px;height:56px;border-color:var(--accent-light);opacity:.5}
+@media (max-width:968px){.cursor-dot,.cursor-ring{display:none}}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  height:var(--nav-height);
+  display:flex;align-items:center;
+  background:rgba(8,9,10,.85);
+  backdrop-filter:blur(20px) saturate(1.4);
+  -webkit-backdrop-filter:blur(20px) saturate(1.4);
+  border-bottom:1px solid var(--border-subtle);
+  transition:var(--transition);
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;max-width:var(--max-width);margin:0 auto;padding:0 24px;
+}
+.nav-logo{
+  display:flex;align-items:center;gap:12px;
+  font-weight:600;font-size:1.05rem;color:var(--text-primary);
+  letter-spacing:-.02em;
+}
+.nav-logo img{width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid var(--border-subtle)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{
+  font-size:.85rem;font-weight:500;color:var(--text-tertiary);
+  letter-spacing:-.01em;position:relative;
+  padding:4px 0;transition:color .3s;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;
+  height:1.5px;background:var(--accent);
+  transform:scaleX(0);transition:transform .3s;
+}
+.nav-links a:hover{color:var(--text-primary)}
+.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
+.nav-links a.active{color:var(--accent)}
+.nav-cta{
+  background:var(--accent);color:var(--bg-deep) !important;
+  padding:8px 20px;border-radius:var(--radius-full);
+  font-weight:600 !important;font-size:.8rem !important;
+}
+.nav-cta::after{display:none !important}
+.nav-cta:hover{background:var(--accent-light) !important;color:var(--bg-deep) !important;transform:translateY(-1px)}
+
+.nav-toggle{
+  display:none;flex-direction:column;gap:5px;cursor:pointer;
+  width:28px;height:20px;justify-content:center;
+}
+.nav-toggle span{
+  display:block;width:100%;height:2px;
+  background:var(--text-primary);border-radius:4px;
+  transition:var(--transition);
+}
+.nav-toggle.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.nav-toggle.open span:nth-child(2){opacity:0}
+.nav-toggle.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding-top:var(--nav-height);position:relative;overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,169,110,.08) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 50% at 20% 60%, rgba(201,169,110,.04) 0%, transparent 50%);
+  pointer-events:none;
+}
+.hero-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;
+  align-items:center;width:100%;max-width:var(--max-width);margin:0 auto;padding:0 24px;
+  position:relative;z-index:2;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px;border-radius:var(--radius-full);
+  border:1px solid var(--border-standard);
+  font-size:.8rem;font-weight:500;color:var(--text-tertiary);
+  margin-bottom:24px;
+}
+.hero-tag span{color:var(--accent)}
+.hero h1{
+  font-size:clamp(2.8rem,6vw,4.2rem);font-weight:700;
+  line-height:1.05;letter-spacing:-.035em;
+  color:var(--text-primary);margin-bottom:20px;
+}
+.hero h1 .accent{background:linear-gradient(135deg,var(--accent),var(--accent-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{
+  font-size:1.05rem;color:var(--text-tertiary);
+  max-width:520px;margin-bottom:36px;line-height:1.7;
+}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:48px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 28px;border-radius:var(--radius-full);
+  font-weight:500;font-size:.9rem;
+  transition:var(--transition);position:relative;overflow:hidden;
+}
+.btn-primary{
+  background:var(--accent);color:var(--bg-deep) !important;
+  box-shadow:0 4px 20px var(--accent-glow);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--accent-glow)}
+.btn-ghost{
+  border:1px solid var(--border-standard);color:var(--text-primary) !important;
+}
+.btn-ghost:hover{border-color:var(--accent);background:rgba(201,169,110,.08)}
+
+.hero-social{
+  display:flex;gap:16px;
+}
+.hero-social a{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg-card);border:1px solid var(--border-subtle);
+  font-size:1rem;transition:var(--transition);
+}
+.hero-social a:hover{border-color:var(--accent);background:var(--accent-glow);transform:translateY(-2px)}
+
+.hero-visual{
+  display:flex;justify-content:center;align-items:center;
+  position:relative;
+}
+.hero-visual-inner{
+  position:relative;width:100%;max-width:480px;
+}
+.hero-logo-large{
+  width:200px;height:200px;border-radius:50%;
+  object-fit:cover;border:2px solid var(--border-standard);
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+  margin:0 auto;
+}
+.hero-float{
+  position:absolute;display:flex;align-items:center;gap:8px;
+  background:var(--bg-elevated);border:1px solid var(--border-standard);
+  padding:10px 18px;border-radius:var(--radius-md);
+  font-size:.8rem;font-weight:500;color:var(--text-secondary);
+  white-space:nowrap;
+  animation:float 4s ease-in-out infinite;
+}
+.hero-float-1{top:0;right:-20px;animation-delay:0s}
+.hero-float-2{bottom:30px;left:-30px;animation-delay:2s}
+.hero-float .num{color:var(--accent);font-weight:700}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+/* ============================================================
+   SECTION SHARED
+   ============================================================ */
+.section{padding:100px 0;position:relative}
+.section-inner{max-width:var(--max-width);margin:0 auto;padding:0 24px}
+.section-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.75rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:.12em;color:var(--accent);
+  margin-bottom:16px;
+}
+.section-label::before{content:'';width:24px;height:1px;background:var(--accent)}
+.section-title{
+  font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;
+  color:var(--text-primary);line-height:1.1;letter-spacing:-.03em;
+  margin-bottom:16px;
+}
+.section-desc{color:var(--text-tertiary);font-size:1rem;max-width:560px;line-height:1.7}
+
+/* ============================================================
+   VALUES
+   ============================================================ */
+.values-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px;
+}
+.value-card{
+  background:var(--bg-card);border:1px solid var(--border-subtle);
+  border-radius:var(--radius-md);padding:28px 24px;
+  text-align:center;transition:var(--transition);
+}
+.value-card:hover{background:var(--bg-card-hover);border-color:var(--border-standard);transform:translateY(-4px)}
+.value-card .icon{font-size:1.8rem;margin-bottom:12px}
+.value-card h4{color:var(--text-primary);font-weight:600;font-size:.95rem;margin-bottom:6px}
+.value-card p{color:var(--text-tertiary);font-size:.82rem;line-height:1.5}
+
+/* ============================================================
+   PROJECTS SECTION
+   ============================================================ */
+.projects-header{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:48px;
+}
+
+.project-card{
+  background:var(--bg-card);border:1px solid var(--border-subtle);
+  border-radius:var(--radius-lg);padding:36px;
+  transition:var(--transition);cursor:pointer;
+  position:relative;overflow:hidden;
+  margin-bottom:20px;
+}
+.project-card:last-child{margin-bottom:0}
+.project-card:hover{
+  background:var(--bg-card-hover);border-color:var(--border-standard);
+  transform:translateX(8px);
+}
+.project-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:var(--accent);
+  transform:scaleY(0);transition:transform .4s;
+}
+.project-card:hover::before{transform:scaleY(1)}
+.project-card-tag{
+  font-size:.75rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--accent);margin-bottom:10px;
+}
+.project-card h3{
+  font-size:1.3rem;font-weight:600;color:var(--text-primary);
+  margin-bottom:8px;letter-spacing:-.02em;
+}
+.project-card p{color:var(--text-tertiary);font-size:.9rem;margin-bottom:16px;line-height:1.6}
+.project-card-tools{
+  display:flex;flex-wrap:wrap;gap:6px;
+}
+.project-card-tools span{
+  font-size:.72rem;padding:4px 12px;
+  border-radius:var(--radius-full);
+  background:rgba(201,169,110,.1);color:var(--accent-light);
+  border:1px solid rgba(201,169,110,.15);
+}
+.project-card-arrow{
+  position:absolute;right:36px;top:50%;transform:translateY(-50%);
+  font-size:1.5rem;color:var(--text-quaternary);
+  transition:var(--transition);
+}
+.project-card:hover .project-card-arrow{color:var(--accent);transform:translateY(-50%) translateX(4px)}
+
+/* ============================================================
+   BRANDS
+   ============================================================ */
+.brands-bg{background:var(--bg-panel);border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)}
+.brands-list{
+  display:flex;flex-wrap:wrap;gap:10px;margin-top:32px;
+  justify-content:center;
+}
+.brands-list span{
+  padding:8px 18px;border-radius:var(--radius-full);
+  background:var(--bg-card);border:1px solid var(--border-subtle);
+  font-size:.82rem;color:var(--text-tertiary);
+  transition:var(--transition);
+}
+.brands-list span:hover{background:var(--accent-glow);border-color:rgba(201,169,110,.2);color:var(--accent-light)}
+
+/* ============================================================
+   PROJECT DETAIL OVERLAY
+   ============================================================ */
+.project-overlay{
+  position:fixed;inset:0;z-index:2000;
+  background:var(--bg-deep);overflow-y:auto;
+  opacity:0;visibility:hidden;
+  transition:opacity .5s,visibility .5s;
+}
+.project-overlay.open{opacity:1;visibility:visible}
+.project-overlay-inner{max-width:900px;margin:0 auto;padding:100px 24px 60px}
+.project-close{
+  position:fixed;top:20px;right:24px;z-index:2001;
+  width:44px;height:44px;border-radius:50%;
+  background:var(--bg-elevated);border:1px solid var(--border-standard);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;transition:var(--transition);
+}
+.project-close:hover{background:var(--accent);color:var(--bg-deep);border-color:var(--accent)}
+.project-detail-header{margin-bottom:40px}
+.project-detail-header .tag{
+  font-size:.75rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--accent);margin-bottom:12px;
+}
+.project-detail-header h2{
+  font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;
+  color:var(--text-primary);letter-spacing:-.03em;line-height:1.1;
+}
+.project-detail-header .subtitle{
+  font-size:1.05rem;color:var(--text-tertiary);
+  margin-top:8px;line-height:1.6;
+}
+.project-detail-body p{
+  font-size:1rem;color:var(--text-secondary);
+  margin-bottom:20px;line-height:1.8;
+}
+.project-detail-body p:last-child{margin-bottom:0}
+.project-tools-block{
+  display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;margin-bottom:32px;
+}
+.project-tools-block span{
+  padding:6px 16px;border-radius:var(--radius-full);
+  background:rgba(201,169,110,.1);color:var(--accent-light);
+  border:1px solid rgba(201,169,110,.15);
+  font-size:.82rem;
+}
+.project-detail-meta{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  margin-top:40px;padding-top:32px;
+  border-top:1px solid var(--border-subtle);
+}
+.project-detail-meta div dt{font-size:.75rem;color:var(--text-quaternary);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.project-detail-meta div dd{font-size:.95rem;color:var(--text-primary);font-weight:500}
+.project-detail-image{
+  margin:24px 0;border-radius:var(--radius-md);overflow:hidden;
+  border:1px solid var(--border-subtle);
+}
+.project-detail-image img{width:100%;height:auto}
+
+/* ============================================================
+   RESUME PAGE
+   ============================================================ */
+.resume-page{max-width:800px;margin:0 auto;padding:100px 24px 60px}
+.resume-header{margin-bottom:40px}
+.resume-header h1{font-size:2.2rem;font-weight:700;color:var(--text-primary);letter-spacing:-.03em}
+.resume-header .role{color:var(--accent);font-size:1.05rem;margin-top:4px}
+.resume-section{margin-bottom:36px}
+.resume-section h3{
+  font-size:1rem;font-weight:600;color:var(--accent);
+  text-transform:uppercase;letter-spacing:.08em;
+  margin-bottom:20px;padding-bottom:8px;
+  border-bottom:1px solid var(--border-subtle);
+}
+.resume-item{margin-bottom:20px}
+.resume-item h4{color:var(--text-primary);font-size:1.05rem;font-weight:600}
+.resume-item .date{color:var(--text-quaternary);font-size:.82rem;margin:2px 0 8px}
+.resume-item p{color:var(--text-tertiary);font-size:.9rem;line-height:1.6}
+
+/* ============================================================
+   CONTACT / FOOTER
+   ============================================================ */
+.footer{
+  background:var(--bg-panel);border-top:1px solid var(--border-subtle);
+  padding:60px 0 30px;
+}
+.footer-grid{
+  display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;
+  max-width:var(--max-width);margin:0 auto;padding:0 24px;
+}
+.footer-brand img{width:44px;height:44px;border-radius:50%;margin-bottom:12px}
+.footer-brand h4{color:var(--text-primary);font-weight:600;font-size:1rem;margin-bottom:8px}
+.footer-brand p{color:var(--text-tertiary);font-size:.85rem;max-width:300px;line-height:1.6}
+.footer-social{display:flex;gap:10px;margin-top:16px}
+.footer-social a{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg-card);border:1px solid var(--border-subtle);
+  transition:var(--transition);
+}
+.footer-social a:hover{border-color:var(--accent);background:var(--accent-glow)}
+.footer h5{color:var(--text-primary);font-weight:600;font-size:.9rem;margin-bottom:16px}
+.footer-links{list-style:none}
+.footer-links li{margin-bottom:10px}
+.footer-links a{font-size:.85rem;color:var(--text-tertiary);transition:color .2s}
+.footer-links a:hover{color:var(--accent)}
+.footer-bottom{
+  text-align:center;padding-top:30px;margin-top:40px;
+  border-top:1px solid var(--border-subtle);
+  font-size:.82rem;color:var(--text-quaternary);
+  max-width:var(--max-width);margin-left:auto;margin-right:auto;padding-left:24px;padding-right:24px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media(max-width:968px){
+  .hero-grid{grid-template-columns:1fr;gap:40px;text-align:center}
+  .hero p{margin:0 auto 36px}
+  .hero-btns{justify-content:center}
+  .hero-social{justify-content:center}
+  .hero-visual{order:-1}
+  .values-grid{grid-template-columns:repeat(2,1fr)}
+  .project-card-arrow{display:none}
+  .projects-header{flex-direction:column;gap:16px}
+  .footer-grid{grid-template-columns:1fr}
+  .project-detail-meta{grid-template-columns:1fr}
+  .nav-links{position:fixed;top:var(--nav-height);left:0;right:0;
+    background:rgba(8,9,10,.98);backdrop-filter:blur(20px);
+    flex-direction:column;padding:24px;gap:20px;
+    border-bottom:1px solid var(--border-standard);
+    transform:translateY(-10px);opacity:0;visibility:hidden;
+    transition:var(--transition);
+  }
+  .nav-links.open{transform:translateY(0);opacity:1;visibility:visible}
+  .nav-toggle{display:flex}
+}
+@media(max-width:600px){
+  .values-grid{grid-template-columns:1fr}
+  .section{padding:60px 0}
+  .project-card{padding:24px}
+}
+</style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAVIGATION -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo" data-nav="home">
+      <img src="assets/logo.png" alt="Hendry Chou"> Hendry Chou
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#" class="active" data-nav="home">Home</a>
+      <a href="#" data-nav="work">Work</a>
+      <a href="#" data-nav="resume">Resume</a>
+      <a href="#" data-nav="contact" class="nav-cta">Let's Talk</a>
+    </div>
+    <div class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HOME VIEW ===== -->
+<div id="view-home">
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid">
+    <div>
+      <div class="hero-tag">✨ Available for <span>collaborations</span> &amp; opportunities</div>
+      <h1>Hendry Chou<br><span class="accent">Product Designer</span></h1>
+      <p>Crafting complex products and addressing intricate user needs. Currently shaping the future of wealth management at PINA Indonesia.</p>
+      <div class="hero-btns">
+        <a href="#" class="btn btn-primary" data-nav="work">View Portfolio →</a>
+        <a href="#" class="btn btn-ghost" data-nav="resume">Resume &darr;</a>
+      </div>
+      <div class="hero-social">
+        <a href="https://www.linkedin.com/in/hendrychou" target="_blank" aria-label="LinkedIn">in</a>
+        <a href="https://www.tiktok.com/@zaruandhissiblings" target="_blank" aria-label="TikTok">🎵</a>
+        <a href="https://www.instagram.com/zaruandhissiblings" target="_blank" aria-label="Instagram">📸</a>
+        <a href="mailto:hendry@zaru.app" aria-label="Email">✉</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-visual-inner">
+        <img src="assets/logo.png" alt="Hendry Chou" class="hero-logo-large">
+        <div class="hero-float hero-float-1"><span class="num">7+</span> Years Experience</div>
+        <div class="hero-float hero-float-2"><span class="num">15+</span> Brands Served</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONAL VALUES -->
+<section class="section" style="background:var(--bg-panel);border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)">
+  <div class="section-inner">
+    <div class="section-label">Design Philosophy</div>
+    <h2 class="section-title">Personal Values</h2>
+    <p class="section-desc">Four principles that guide every product decision and design I make.</p>
+    <div class="values-grid" id="valuesGrid">
+      <div class="value-card"><div class="icon">🎯</div><h4>User Centered</h4><p>Every pixel serves the user. Research-first approach to validate every decision.</p></div>
+      <div class="value-card"><div class="icon">📊</div><h4>Data Driven</h4><p>Decisions backed by metrics. Measure, iterate, and improve continuously.</p></div>
+      <div class="value-card"><div class="icon">🎨</div><h4>Creativity Freedom</h4><p>Explore divergent ideas before converging. Great solutions need room to breathe.</p></div>
+      <div class="value-card"><div class="icon">🔄</div><h4>Embrace Changes</h4><p>Adapt and evolve. The best products are shaped by feedback and iteration.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section" id="work-section">
+  <div class="section-inner">
+    <div class="projects-header">
+      <div>
+        <div class="section-label">Portfolio</div>
+        <h2 class="section-title">Selected Work</h2>
+        <p class="section-desc">A collection of products and experiences I've designed across fintech, e-commerce, and early childhood development.</p>
+      </div>
+    </div>
+    <div id="projectCards"></div>
+  </div>
+</section>
+
+<!-- BRANDS -->
+<section class="section brands-bg">
+  <div class="section-inner">
+    <div class="section-label">Brand Experience</div>
+    <h2 class="section-title">Trusted By</h2>
+    <p class="section-desc">I've had the privilege of working with these notable brands across various industries.</p>
+    <div class="brands-list" id="brandsList"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="assets/logo.png" alt="Hendry Chou">
+      <h4>Hendry Chou</h4>
+      <p>Product designer crafting meaningful experiences at the intersection of user needs and business goals.</p>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com/in/hendrychou" target="_blank" aria-label="LinkedIn">in</a>
+        <a href="https://www.tiktok.com/@zaruandhissiblings" target="_blank" aria-label="TikTok">🎵</a>
+        <a href="https://www.instagram.com/zaruandhissiblings" target="_blank" aria-label="Instagram">📸</a>
+        <a href="mailto:hendry@zaru.app" aria-label="Email">✉</a>
+      </div>
+    </div>
+    <div>
+      <h5>Navigate</h5>
+      <ul class="footer-links">
+        <li><a href="#" data-nav="home">Home</a></li>
+        <li><a href="#" data-nav="work">Work</a></li>
+        <li><a href="#" data-nav="resume">Resume</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Contact</h5>
+      <ul class="footer-links">
+        <li><a href="mailto:hendry@zaru.app">hendry@zaru.app</a></li>
+        <li><a href="https://www.linkedin.com/in/hendrychou" target="_blank">LinkedIn</a></li>
+        <li><a href="https://linktr.ee/zaruandhissiblings" target="_blank">Linktree</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 Hendry Chou. Designed with intention.</div>
+</footer>
+</div>
+
+<!-- ===== RESUME VIEW ===== -->
+<div id="view-resume" style="display:none">
+<div class="resume-page">
+  <div class="resume-header">
+    <h1>Hendry Chou</h1>
+    <div class="role">Product Designer</div>
+  </div>
+
+  <div class="resume-section">
+    <h3>Summary</h3>
+    <p style="color:var(--text-secondary);font-size:.95rem;line-height:1.7">Designer passionate about crafting complex products and addressing intricate user needs. Currently shaping the future of wealth management at PINA Indonesia. With extensive experience in both product creation and sales, excels at delivering value to customers and driving results for clients.</p>
+  </div>
+
+  <div class="resume-section">
+    <h3>Experience</h3>
+    <div class="resume-item">
+      <h4>Product Designer — PINA Indonesia</h4>
+      <div class="date">Current</div>
+      <p>Leading design for digital wealth management platform integrating financial software with certified financial planners. Streamlining repetitive tasks and providing CFPs with tools to enhance their work.</p>
+    </div>
+    <div class="resume-item">
+      <h4>UX/UI Designer — Various Agencies</h4>
+      <div class="date">2019 — Present</div>
+      <p>Designed for Traveloka, Bank Central Asia (BCA), ParentStory, IVPL, and Dancow. Specializing in fintech, e-commerce, and early childhood development.</p>
+    </div>
+  </div>
+
+  <div class="resume-section">
+    <h3>Design Toolkit</h3>
+    <div class="project-tools-block">
+      <span>In-Depth Interview</span><span>Usability Testing</span><span>Service Blueprint</span>
+      <span>Service Design</span><span>UX Design</span><span>UI Design</span>
+      <span>Information Architecture</span><span>Prototyping</span><span>Concept Testing</span>
+      <span>Design Sprint</span><span>Contextual Interview</span><span>Role Playing</span>
+    </div>
+  </div>
+
+  <div class="resume-section">
+    <h3>Brand Experience</h3>
+    <div class="project-tools-block">
+      <span>AIA</span><span>Bank BCA</span><span>Traveloka</span><span>PINA</span>
+      <span>Unilever</span><span>Nestle</span><span>Heineken</span><span>A&W</span>
+      <span>Dancow</span><span>Blue Bird</span><span>Telkomsel</span><span>HP</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== PROJECT DETAIL OVERLAY ===== -->
+<div class="project-overlay" id="projectOverlay">
+  <button class="project-close" id="projectClose">✕</button>
+  <div class="project-overlay-inner" id="projectDetailContent"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+// ============================================================
+// PROJECTS DATA
+// ============================================================
+const projects = [
+  {
+    id:'pina-advisory',
+    tag:'PINA — Digital Advisory',
+    title:'Providing Integrated Financial Advice',
+    subtitle:'Digital wealth management platform that integrates financial software with certified financial planners to offer personalized and accessible financial advice.',
+    description:`<p>PINA is a digital wealth management platform that integrates financial software with certified financial planners to offer personalized and accessible financial advice. It aims to streamline repetitive tasks and provide CFPs with the necessary tools to enhance their work.</p><p>Clients can monitor and act on advice through a single platform, with options for video calls or chats, and all data automatically synchronizes with their app.</p>`,
+    tools:['In-Depth Interview','Usability Testing','Service Blueprint','Service Design','UX Design','UI Design'],
+    role:'Lead Product Designer',
+    timeline:'Current',
+    company:'PINA Indonesia',
+    image:''
+  },
+  {
+    id:'pina-wealth',
+    tag:'PINA — Wealth Management Tools',
+    title:'Seamlessly Manage All Your Finance in One Place',
+    subtitle:'Advanced tools to track clients\' net worth and budget. 60,000 users · 4.5★ on App Store.',
+    description:`<p>One of PINA's products is advanced tools to track clients' net worth and budget. Initially, the app was available only on mobile, but after talking to customers, we found that many users needed a desktop version as well. By combining technologies like Open Banking and Dynamic Data Tracking, these tools allow users to get the most updated value of their data.</p><p>We also provide an investment feature that enables our clients to act based on insights from the Net Worth and Budget Tracker. The app currently has 60,000 users with a 4.5-star rating on the App Store.</p>`,
+    tools:['Information Architecture','Usability Testing','UX Design','UI Design'],
+    role:'Product Designer',
+    timeline:'Current',
+    company:'PINA Indonesia',
+    image:''
+  },
+  {
+    id:'traveloka',
+    tag:'Traveloka',
+    title:'Improve In-Store Food Ordering Experience',
+    subtitle:'A new food ordering concept that allowed customers to order without direct interaction and place orders in advance.',
+    description:`<p>In 2020, Traveloka tested a new food ordering concept. This product allowed customers to order food without direct interaction and place orders in advance. The system enabled users to receive multiple offers, thereby increasing restaurant traffic.</p><p>Our agency's role was to test and refine the concept, and design the full experience for both the user and restaurant apps.</p>`,
+    tools:['Prototyping','Concept Testing','Role Playing','UX Design','UI Design'],
+    role:'UX/UI Designer',
+    timeline:'2020',
+    company:'Traveloka (via Agency)',
+    image:''
+  },
+  {
+    id:'bca',
+    tag:'Bank Central Asia',
+    title:'Help Small Business Owners Track Their Store Performance',
+    subtitle:'From EDC Diagnostic tool to comprehensive store performance tracking platform.',
+    description:`<p>Initially, the application was just an EDC Diagnostic tool, but we saw potential to expand it. During our research, we found that small business owners, especially those with multiple stores, struggle to track performance.</p><p>With this in mind, we shifted the product to capture and report different store performances.</p>`,
+    tools:['In-depth Interview','UX Design','Usability Testing','UI Design'],
+    role:'UX/UI Designer',
+    timeline:'2021',
+    company:'Bank Central Asia (via Agency)',
+    image:''
+  },
+  {
+    id:'parentstory',
+    tag:'ParentStory',
+    title:'Helping Parents Find Suitable Activities for Each Child',
+    subtitle:'Curated platform for kids\' activity vendors in Indonesia with personalized home feed.',
+    description:`<p>ParentStory is a curated platform for kids' activity vendors in Indonesia. There is a growing need to provide personalized activities based on moms' interests and their kids' ages.</p><p>The biggest challenge is that Indonesians tend to have more than one child, so our home feed must offer personalization and flexibility to switch between children.</p>`,
+    tools:['Information Architecture','UX Design','Prototyping'],
+    role:'Product Designer',
+    timeline:'2022',
+    company:'ParentStory',
+    image:''
+  },
+  {
+    id:'ivpl',
+    tag:'IVPL',
+    title:'Nurturing the Next Gaming Champion Through Intense Competition',
+    subtitle:'MVP designed in less than 1 month, launched within 2 months.',
+    description:`<p>IVPL is a unique platform for competitive gaming. The challenge was to design an MVP in less than 1 month and launch the product within 2 months — a fast-paced project that required rapid prototyping and iterative testing.</p><p>The platform enables tournament organization, player matchmaking, and real-time competition tracking.</p>`,
+    tools:['Information Architecture','UX Design','UI Design'],
+    role:'Product Designer',
+    timeline:'2022',
+    company:'IVPL',
+    image:''
+  },
+  {
+    id:'dancow',
+    tag:'Dancow NutriTods',
+    title:'Early Childhood Development Solutions',
+    subtitle:'Kid-centered platform for tracking growth and providing stimulation advice.',
+    description:`<p>NutriTods 101 is a tool that tracks growth based on children's activities and provides stimulation advice. It helps moms understand their children's development and stimulate learning capabilities effectively.</p><p>This project involved a comprehensive Design Sprint process, from analogous inspiration to contextual interviews and concept testing.</p>`,
+    tools:['Design Sprint','Analogous Inspiration','Contextual Interview','UX Design','Prototype Creation','Concept Testing','UI Design'],
+    role:'Product Designer',
+    timeline:'2020',
+    company:'Dancow / Nestle',
+    image:''
+  }
+];
+
+const brands = [
+  'AIA','Bank BCA','T-Cash','Telkomsel DigiAds',
+  'A&W','Bir Bintang','Buavita','Heineken','Magnum','Milo','Nestle Indonesia','Teh Botol Sosro',
+  'Clear','Dancow','Dove','Lifebuoy','Pepsodent','Sunsilk','Tresemme','Unilever Indonesia','Wings',
+  'Changi Airport','Daum','HP','Opera','ParentStory','Traveloka','Zenius',
+  'Blue Bird','Cerelac','LactoGrow','Pocari Sweat','Sampoerna University',
+  'Singapore Airline','Shimajiro','XL Axiata'
+];
+
+// ============================================================
+// RENDER PROJECT CARDS
+// ============================================================
+function renderProjects() {
+  const container = document.getElementById('projectCards');
+  container.innerHTML = projects.map(p => `
+    <div class="project-card" data-project="${p.id}">
+      <div class="project-card-tag">${p.tag}</div>
+      <h3>${p.title}</h3>
+      <p>${p.subtitle}</p>
+      <div class="project-card-tools">${p.tools.map(t => `<span>${t}</span>`).join('')}</div>
+      <div class="project-card-arrow">→</div>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('click', () => openProject(card.dataset.project));
+  });
+}
+
+function renderBrands() {
+  document.getElementById('brandsList').innerHTML = brands.map(b => `<span>${b}</span>`).join('');
+}
+
+// ============================================================
+// PROJECT DETAIL OVERLAY
+// ============================================================
+function openProject(id) {
+  const p = projects.find(x => x.id === id);
+  if (!p) return;
+  const overlay = document.getElementById('projectOverlay');
+  const content = document.getElementById('projectDetailContent');
+  content.innerHTML = `
+    <div class="project-detail-header">
+      <div class="tag">${p.tag}</div>
+      <h2>${p.title}</h2>
+      <div class="subtitle">${p.subtitle}</div>
+    </div>
+    <div class="project-detail-body">${p.description}</div>
+    <div class="project-tools-block">${p.tools.map(t => `<span>${t}</span>`).join('')}</div>
+    <div class="project-detail-meta">
+      <div><dt>Role</dt><dd>${p.role}</dd></div>
+      <div><dt>Timeline</dt><dd>${p.timeline}</dd></div>
+      <div><dt>Company</dt><dd>${p.company}</dd></div>
+    </div>
+  `;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  gsap.fromTo('.project-overlay-inner', {opacity:0,y:30}, {opacity:1,y:0,duration:.6,ease:'power3.out'});
+}
+
+function closeProject() {
+  document.getElementById('projectOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('projectClose').addEventListener('click', closeProject);
+document.getElementById('projectOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeProject();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeProject();
+});
+
+// ============================================================
+// VIEW ROUTING
+// ============================================================
+function showView(view) {
+  document.getElementById('view-home').style.display = view === 'home' || view === 'work' || view === 'contact' ? '' : 'none';
+  document.getElementById('view-resume').style.display = view === 'resume' ? '' : 'none';
+
+  document.querySelectorAll('[data-nav]').forEach(el => {
+    el.classList.remove('active');
+    const nav = el.dataset.nav;
+    if (nav === view || (view === 'home' && nav === 'home') || (view === 'work' && nav === 'work')) {
+      el.classList.add('active');
+    }
+  });
+
+  document.getElementById('navLinks').classList.remove('open');
+  document.getElementById('navToggle').classList.remove('open');
+
+  if (view === 'resume') {
+    setTimeout(() => {
+      gsap.from('#view-resume .resume-section', {opacity:0,y:30,stagger:.1,duration:.6,ease:'power3.out'});
+    },100);
+  }
+  if (view === 'work') {
+    const el = document.getElementById('work-section');
+    if (el) el.scrollIntoView({behavior:'smooth'});
+  }
+  if (view === 'home') {
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+}
+
+document.querySelectorAll('[data-nav]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    showView(el.dataset.nav);
+  });
+});
+
+// ============================================================
+// CUSTOM CURSOR
+// ============================================================
+const cursorDot = document.getElementById('cursorDot');
+const cursorRing = document.getElementById('cursorRing');
+
+if (window.innerWidth > 968) {
+  document.addEventListener('mousemove', e => {
+    cursorDot.style.left = e.clientX + 'px';
+    cursorDot.style.top = e.clientY + 'px';
+    cursorRing.style.left = e.clientX + 'px';
+    cursorRing.style.top = e.clientY + 'px';
+  });
+
+  document.querySelectorAll('a,button,.project-card,.value-card,.brands-list span,.hero-social a,.nav-cta').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursorDot.classList.add('hover');
+      cursorRing.classList.add('hover');
+    });
+    el.addEventListener('mouseleave', () => {
+      cursorDot.classList.remove('hover');
+      cursorRing.classList.remove('hover');
+    });
+  });
+}
+
+// ============================================================
+// MOBILE NAV TOGGLE
+// ============================================================
+document.getElementById('navToggle').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// ============================================================
+// GSAP ANIMATIONS
+// ============================================================
+function initAnimations() {
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Hero
+  gsap.from('.hero-tag', {opacity:0,y:20,duration:.6,delay:.1,ease:'power3.out'});
+  gsap.from('.hero h1', {opacity:0,y:30,duration:.7,delay:.2,ease:'power3.out'});
+  gsap.from('.hero p', {opacity:0,y:20,duration:.6,delay:.35,ease:'power3.out'});
+  gsap.from('.hero-btns .btn', {opacity:0,y:20,duration:.5,stagger:.1,delay:.45,ease:'power3.out'});
+  gsap.from('.hero-social a', {opacity:0,y:15,duration:.4,stagger:.06,delay:.6,ease:'power3.out'});
+  gsap.from('.hero-visual-inner', {opacity:0,x:40,duration:.8,delay:.2,ease:'power3.out'});
+
+  // Values
+  gsap.from('.value-card', {
+    scrollTrigger:{trigger:'#valuesGrid',start:'top 85%'},
+    opacity:0,y:30,duration:.5,stagger:.1,ease:'power3.out'
+  });
+
+  // Project cards - stagger them with a clean reveal
+  gsap.from('.project-card', {
+    scrollTrigger:{trigger:'#projectCards',start:'top 80%'},
+    opacity:0,y:40,duration:.6,stagger:.15,ease:'power3.out'
+  });
+
+  // Project cards - line fill animation
+  document.querySelectorAll('.project-card').forEach(card => {
+    ScrollTrigger.create({
+      trigger: card,
+      start: 'top 85%',
+      onEnter: () => {
+        const line = card.querySelector('::before');
+        gsap.to(card, {'--line-scale':1,duration:.6,ease:'power3.out'});
+      }
+    });
+  });
+
+  // Brands stagger
+  gsap.from('.brands-list span', {
+    scrollTrigger:{trigger:'.brands-list',start:'top 85%'},
+    opacity:0,scale:.8,duration:.4,stagger:.03,ease:'back.out(1.7)'
+  });
+
+  // Section headers
+  document.querySelectorAll('.section').forEach(section => {
+    const label = section.querySelector('.section-label');
+    const title = section.querySelector('.section-title');
+    const desc = section.querySelector('.section-desc');
+    if (label) gsap.from(label, {scrollTrigger:{trigger:section,start:'top 80%'},opacity:0,x:-20,duration:.4,ease:'power3.out'});
+    if (title) gsap.from(title, {scrollTrigger:{trigger:section,start:'top 80%'},opacity:0,y:20,duration:.5,delay:.1,ease:'power3.out'});
+    if (desc) gsap.from(desc, {scrollTrigger:{trigger:section,start:'top 80%'},opacity:0,y:15,duration:.4,delay:.2,ease:'power3.out'});
+  });
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  renderProjects();
+  renderBrands();
+  initAnimations();
+});
+</script>
+</body>
+</html>
